@@ -32,7 +32,7 @@ Before writing any functions or tests. We first should model out our domain, wit
 
 
 ## Unit Types
-```
+```rust
 // unsigned prevents negative numbers (but can force this to runtime error with indirection)
 let positive: u8 = 10;
 let zero: u8 = 0;
