@@ -27,6 +27,34 @@ Rust's drawbacks being:
 
 When in trouble `.clone()` can help you escape (but beware of the dragons defined below)
 
+# Type-first Domain Modeling
+Before writing any functions or tests. We first should model out our domain, with the goal to make irrepresentable states illegal. Doing so will erase an entire category of bugs, reduce the amount of code required, and is the best for of documentation.
+
+
+## Unit Types
+```
+// unsigned prevents negative numbers (but can force this to runtime error with indirection)
+let positive: u8 = 10;
+let zero: u8 = 0;
+// Compilation error
+let negative: u8 = -10;
+
+// nonzero returns option on construction which enforces runtime check
+let some_positive = NonZeroU8::new(10);
+let none_zero = NonZeroU8::new(0);
+// Compilation Error
+let negative = NonZeroU8::new(-10);
+
+let possible_input : Option<&str> = Some("user input");
+
+enum UserRole {
+    Guest,
+    User,
+    Admin,
+}
+```
+Enums represent a singular 
+
 # Links / Inspiration
 https://hamy.xyz/blog/2026-01_high-level-rust
 
