@@ -35,18 +35,35 @@ Be like Bruce Lee; absorb what is useful, disgard what is useless.
 # Ownership vs Memory
 Often used seemingly interchangably, Rust types can get confusing. &str is a borrowed type, it does not own the string data it points to. Box<str> is an owned type, it exclusively owns its heap allocated data. So are they differently represented in memory? Nope, both are fat pointers to the heap data. Why does this matter? If the input parameter of your function is &str you don't need to worry about move semantics "use of moved value", unlike Box<str>. 
 
+But what the hell does Ownership really mean? It means clonable. A type that is owned will copy its value, a borrow type will take a pointer to the data. However that is only for heap allocated data. Data that instead lives on the stack (any values where its size can be known at compile time).
+
+## Stack data types
 | Type | Ownership | Memory |
 | :---: | :---: | :---: |
-| Signed Integer (i8, i16, i32, i64, i128, isize | Owned | Signed intger in 1, 2, 4, 8, 16 bytes or of pointer size |
-| Unsigned Integer (u8, u16, u32, u64, u128, usize | Owned | Unigned intger in 1, 2, 4, 8, 16 bytes or of pointer size |
+| Signed Integer (i8, i16, i32, i64, i128, isize) | Owned | Signed intger in 1, 2, 4, 8, 16 bytes or of pointer size |
+| Unsigned Integer (u8, u16, u32, u64, u128, usize) | Owned | Unigned intger in 1, 2, 4, 8, 16 bytes or of pointer size |
 | Floating Point (f32, f64) | Owned | Floating Point in 4 or 8 bytes | 
 | Char | Owned | 4 bytes of unicode scalar value |
 | Bool | Owned | 1 byte |
-| Unit | Owned | 0 bytes
+| Unit | Owned | 0 bytes |
+| Arrays | Owned | Fixed size at compile time |
+| Tuple | Owned | Fixed size at compile time |
+
+So when would someone need a borrowed reference to a stack variable? 
+1. When we don't want to clone the value when passing as input to a function.
+    - If a function input parameter is &i32 the 4 bytes representing the number will not be copied from the caller functions stack frame into the receiving functions stack frame.
+2. When we don't want to transfer ownership when passing the value as an output of a function.
+    - If a function output value is a &i32 and the underlying bytes lifetime is still valid (either somewhere up the call stack or in some global data) then ownership will not be transfered. (WTF does this mean tho?)
+  
+
+
+
 
 
 
 ---
+Note: function input param &[i32] is more flexible than &Vec<i32> as it accepts both arrays and vectors.
+
 Simple Examples
 
 Reusing a heap allocated value
