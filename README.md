@@ -70,6 +70,49 @@ For high-level rust primative data types on the stack are fine to copy into and 
 | Reference Count `Rc<T>` | Owned | Pointer to heap allocated data (even if that data type is normally stack allocated) with additional bytes to store strong and weak references|
 | Reference to a Reference Count `&Rc<T>` | Borrowed | Clone the pointer to heap allocated data (even if that data type is normally stack allocated) with additional bytes to store strong and weak references ??? Wait, you should double check this in code|
 
+---
+
+#Idiomatic Rust
+https://github.com/mre/idiomatic-rust?tab=readme-ov-file
+
+In general, do not use * from a crate
+
+A corollary of this is that preludes, regardless of their initial convenience, should not be used by us in production code. Nevertheless, they remain a handy tool for others to use when prototyping, so we should still consider creating and exposing them where appropriate.
+
+Do not bring enum variants into scope using * as this obscures the types and in some cases the fact that an enum is being handled. If the name of an enum is too long, can’t reasonably be edited and the problematic usage is in a small scope, it may be renamed locally using use ... as .... The new name should be an acronym of the type used, e.g. TaskStatus would be shortened to Ts. Due to scoping rules around use, these renaming statements should be placed at the top of the function definition which requires it.
+
+The only exception to these rules is that in the context of a unit test module, inserting use super::* is acceptable as it is a well-defined idiom.
+
+Prefer
+```Rust
+use some_crate::{SpecificItem1, SpecificItem2};
+use some_other_crate::SpecificItem3;
+use another_crate::SomeEnum;
+
+fn some_fn(some_enum: SomeEnum) -> SomeEnum {
+    use SomeEnum as Se;
+    match some_enum {
+        Se::Variant1 => { /* ... */ }
+        Se::Variant2 => { /* ... */ },
+    }
+    Se::Variant2
+}
+```
+
+Avoid
+```Rust
+use some_crate::*;
+use some_other_crate::prelude::*;
+use another_crate::{SomeEnum, SomeEnum::*};
+
+fn some_fn(some_enum: SomeEnum) -> SomeEnum {
+    match some_enum {
+        Variant1 => { /* ... */ }
+        Variant2 => { /* ... */ }
+    }
+    Variant2
+}
+```
 
 
 
