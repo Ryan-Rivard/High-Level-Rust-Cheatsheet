@@ -33,25 +33,31 @@ Be like Bruce Lee; absorb what is useful, disgard what is useless.
 | Polymorphism | 🟢 Prefer | Trait (interface) allows for different objects to act as though they are the same. Rust actually has two versions, Static and Dynamic. Static will run faster but will increase the binary size for each variant, Dynamic will be slower but will keep a constant binary size for each variant |
 
 # Ownership vs Memory
-Often used seemingly interchangably, Rust types can get confusing. &str is a borrowed type, it does not own the string data it points to. Box<str> is an owned type, it exclusively owns its heap allocated data. So are they differently represented in memory? Nope, both are fat pointers to the heap data. Why does this matter? If the input parameter of your function is &str you don't need to worry about move semantics "use of moved value", unlike Box<str>. 
+Often used seemingly interchangably, Rust types can get confusing. `&str` is a borrowed type, it does not own the string data it points to. `Box<str>` is an owned type, it exclusively owns its heap allocated data. So are they differently represented in memory? Nope, both are fat pointers to the heap data. Why does this matter? If the input parameter of your function is `&str` you don't need to worry about move semantics "use of moved value", unlike `Box<str>`. 
 
 But what the hell does Ownership really mean? It means clonable. A type that is owned will copy its value, a borrow type will take a pointer to the data. However that is only for heap allocated data. Data that instead lives on the stack (any values where its size can be known at compile time).
 
 ## Stack data types
 | Type | Ownership | Memory |
 | :---: | :---: | :---: |
-| Signed Integer (i8, i16, i32, i64, i128, isize) | Owned | Signed intger in 1, 2, 4, 8, 16 bytes or of pointer size |
-| Unsigned Integer (u8, u16, u32, u64, u128, usize) | Owned | Unigned intger in 1, 2, 4, 8, 16 bytes or of pointer size |
-| Floating Point (f32, f64) | Owned | Floating Point in 4 or 8 bytes | 
-| Char | Owned | 4 bytes of unicode scalar value |
-| Bool | Owned | 1 byte |
-| Unit | Owned | 0 bytes |
-| Tuple | Owned | Compile time known size on the stack (contents may be heap allocated) |
-| Array | Owned | Compile time known size on the stack (contents may be heap allocated) |
-| Enum | Owned | Compile time known size of largest variant on the stack (contents may be heap allocated) |
-| Struct | Owned | Compile time known size on the stack (contents may be heap allocated) |
+| Signed Integer `i8`, `i16`, `i32`, `i64`, `i128`, `isize` | Owned | Signed intger in 1, 2, 4, 8, 16 bytes or of pointer size |
+| Unsigned Integer `u8`, `u16`, `u32`, `u64`, `u128`, `usize` | Owned | Unigned intger in 1, 2, 4, 8, 16 bytes or of pointer size |
+| Floating Point `f32`, `f64` | Owned | Floating Point in 4 or 8 bytes | 
+| `char` | Owned | 4 bytes of unicode scalar value |
+| `bool` | Owned | 1 byte |
+| Unit `()` | Owned | 0 bytes |
+| Tuple `(i32, u8)` | Owned | Compile time known size on the stack (contents may be heap allocated) |
+| Array `[i32;5]` | Owned | Compile time known size on the stack (contents may be heap allocated) |
+| `Enum` | Owned | Compile time known size of largest variant on the stack (contents may be heap allocated) |
+| `Struct` | Owned | Compile time known size on the stack (contents may be heap allocated) |
 
 For high-level rust primative data types on the stack are fine to copy into and out of stack frames. If the Tuple, Array, Enum, or Struct is of significant size however, it may be prudent to use a reference for receiver function input to avoid copying a large amount of data into the new stack frame.
+
+## Heap data types
+| Type | Ownership | Memory |
+| :---: | :---: | :---: |
+| `String` | Owned | Value allocated to heap with extra padding. Stack pointer with address, length, and capacity. Can be thought of litterally as `Vec<u8>` |
+| String Slice `&str` | Borrowed | Value allocated to heap, Stack pointer with address and length. Can be thought of litterally as `&[u8]` |
 
 
 
