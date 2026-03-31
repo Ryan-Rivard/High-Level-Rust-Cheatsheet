@@ -49,11 +49,9 @@ But what the hell does Ownership really mean? It means clonable. A type that is 
 | Arrays | Owned | Fixed size at compile time |
 | Tuple | Owned | Fixed size at compile time |
 
-So when would someone need a borrowed reference to a stack variable? 
-1. When we don't want to clone the value when passing as input to a function.
-    - If a function input parameter is &i32 the 4 bytes representing the number will not be copied from the caller functions stack frame into the receiving functions stack frame.
-2. When we don't want to transfer ownership when passing the value as an output of a function.
-    - If a function output value is a &i32 and the underlying bytes lifetime is still valid (either somewhere up the call stack or in some global data) then ownership will not be transfered. (WTF does this mean tho?)
+For high-level rust primative data types on the stack are fine to copy into and out of stack frames. Any borrowing references such as &i32 are not for grug. Accept and return Owned primatives.
+
+
   
 
 
