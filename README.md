@@ -35,7 +35,9 @@ Be like Bruce Lee; absorb what is useful, disgard what is useless.
 # Ownership vs Memory
 Often used seemingly interchangably, Rust types can get confusing. `&str` is a borrowed type, it does not own the string data it points to. `Box<str>` is an owned type, it exclusively owns its heap allocated data. So are they differently represented in memory? Nope, both are fat pointers to the heap data. Why does this matter? If the input parameter of your function is `&str` you don't need to worry about move semantics "use of moved value", unlike `Box<str>`. 
 
-But what the hell does Ownership really mean? It means clonable. A type that is owned will copy its value, a borrow type will take a pointer to the data. However that is only for heap allocated data. Data that instead lives on the stack (any values where its size can be known at compile time).
+But what the hell does Ownership really mean? 
+1. It means clonable. A type that is owned will copy its value, a borrow type will take a pointer to the data. However that is only for heap allocated data. Data that instead lives on the stack (any values where its size can be known at compile time).
+2. It means dropable. A type that is owned will drop its memory when it's owner goes out of scope.
 
 ## Stack data types
 | Type | Ownership | Memory |
@@ -56,7 +58,7 @@ For high-level rust primative data types on the stack are fine to copy into and 
 ## Heap data types
 | Type | Ownership | Memory |
 | :---: | :---: | :---: |
-| `String` | Owned | Growale value allocated to heap with extra padding. Stack pointer with address, length, and capacity. Can be thought of litterally as `Vec<u8>` |
+| `String` | Owned | Growable value allocated to heap with extra padding. Stack pointer with address, length, and capacity. Can be thought of litterally as `Vec<u8>` |
 | String Slice `&str` | Borrowed | Value allocated to heap, Stack pointer with address and length. Can be thought of litterally as `&[u8]` |
 | Vec `vec<T>` | Owned | Growable value allocated to heap with extra padding. Stack pointer with address, length, and capacity. |
 | Slice `&[T]` | Borrowed | Value allocated to heap, Stack pointer with address and length. |
