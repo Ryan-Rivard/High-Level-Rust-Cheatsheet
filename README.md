@@ -18,12 +18,20 @@ Be like Bruce Lee; absorb what is useful, disgard what is useless.
 ## Functional Paradigm
 | Aspect | Recomendation | Reasoning |
 | :---: | :---: | :---: |
-| Immutability | 🟢 Prefer | Mutable data and shared state can be difficult to manage, Rust defaults to immutable but allows the explicit escape hatch for when it is needed |
+| Data Immutability | 🟢 Prefer | Mutable data and shared state can be difficult to manage, Rust defaults to immutable but allows the explicit escape hatch for when it is needed |
 | Pure Functions | 🟢 Prefer | Functions that have no side-effects and always produce the same output for a given input are easy to test and less prone to bugs. They have other benefits such as simpler parallelization and are easier to refactor if needed |
-| First Class Functions | 🟢 asdf | asdf |
 | Higher-Order Functions | ⚠️ Contingent | Good for simpler actions, but if your logic is complex prefer procedural as it will be easier to debug |
-| Function Composition | 🟢 asdf | asdf |
-| Recursion over loops | 🛑 Avoid | asdf |
+| Function Composition | 🟢 Prefer | Combining small pure functions where the output of one becomes the input of the next. |
+| Recursion over loops | 🛑 Avoid | Loops often require mutability of a counter variable, however the recursive solution can often be more complex and require tail-call optimization to not blow the call stack. Avoid recursion if you can, use higher-order functions or plain-old loops. |
+
+## Object Oriented Paradigm
+| Aspect | Recomendation | Reasoning |
+| :---: | :---: | :---: |
+| Encapsulation | 🟢 Prefer | Internal state of an object can only be modified through public methods, protecting data integrity and reducing errors |
+| Abstraction | 🟢 Prefer | Don't rely on the implementation of behavior, rely on the trait (interface). If the implementation changes, the callers are uneffected. |
+| Inheritance | 🛑 Avoid | Prefer composition to inheritance, and utilize the default trait implementation if needed |
+| Polymorphism | 🟢 Prefer | Trait (interface) allows for different objects to act as though they are the same. Rust actually has two versions, Static and Dynamic. Static will run faster but will increase the binary size for each variant, Dynamic will be slower but will keep a constant binary size for each variant |
+
 
 
 ---
