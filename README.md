@@ -56,8 +56,17 @@ For high-level rust primative data types on the stack are fine to copy into and 
 ## Heap data types
 | Type | Ownership | Memory |
 | :---: | :---: | :---: |
-| `String` | Owned | Value allocated to heap with extra padding. Stack pointer with address, length, and capacity. Can be thought of litterally as `Vec<u8>` |
+| `String` | Owned | Growale value allocated to heap with extra padding. Stack pointer with address, length, and capacity. Can be thought of litterally as `Vec<u8>` |
 | String Slice `&str` | Borrowed | Value allocated to heap, Stack pointer with address and length. Can be thought of litterally as `&[u8]` |
+| Vec `vec<T>` | Owned | Growable value allocated to heap with extra padding. Stack pointer with address, length, and capacity. |
+| Slice `&[T]` | Borrowed | Value allocated to heap, Stack pointer with address and length. |
+| Option `Option<T>` | Owned | If the value is a stack data type: One additional byte of option is added to the size of T. Otherwise, Value allocated to heap, Stack pointer with address, length, and possible capacity. If the Stack point is all zeroes it represents the None value. |
+| Option `Option<&T>` | Borrowed | Value allocated to heap, Stack pointer with address, length, and possible capacity. If the Stack point is all zeroes it represents the None value. |
+| Result `Result<T, E>` | Owned | Larger of the two generics is allocated to the stack. Any backing heap data is allocated appropriately |
+| Result `Result<&T, E>` | Borrowed | Larger of the two generics is allocated to the stack. Any backing heap data is allocated appropriately PLEASE DOUBLE CHECK WITH THE COOL GUY ON YOUTUBE |
+| Box `Box<T>` | Owned | Pointer to heap allocated data (even if that data type is normally stack allocated) |
+| Reference Count `Rc<T>` | Owned | Pointer to heap allocated data (even if that data type is normally stack allocated) with additional bytes to store strong and weak references|
+| Reference to a Reference Count `&Rc<T>` | Borrowed | Clone the pointer to heap allocated data (even if that data type is normally stack allocated) with additional bytes to store strong and weak references ??? Wait, you should double check this in code|
 
 
 
