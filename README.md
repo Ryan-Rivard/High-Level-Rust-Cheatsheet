@@ -46,8 +46,6 @@ But what the hell does Ownership really mean? It means clonable. A type that is 
 | Char | Owned | 4 bytes of unicode scalar value |
 | Bool | Owned | 1 byte |
 | Unit | Owned | 0 bytes |
-| Arrays | Owned | Fixed size at compile time |
-| Tuple | Owned | Fixed size at compile time |
 
 For high-level rust primative data types on the stack are fine to copy into and out of stack frames. Any borrowing references such as &i32 are not for grug. Accept and return Owned primatives.
 
