@@ -32,6 +32,38 @@ Be like Bruce Lee; absorb what is useful, disgard what is useless.
 | Inheritance | 🛑 Avoid | Prefer composition to inheritance, and utilize the default trait implementation if needed |
 | Polymorphism | 🟢 Prefer | Trait (interface) allows for different objects to act as though they are the same. Rust actually has two versions, Static and Dynamic. Static will run faster but will increase the binary size for each variant, Dynamic will be slower but will keep a constant binary size for each variant |
 
+# Ownership vs Memory
+Often used seemingly interchangably, Rust types can get confusing. &str is a borrowed type, it does not own the string data it points to. Box<str> is an owned type, it exclusively owns its heap allocated data. So are they differently represented in memory? Nope, both are fat pointers to the heap data. Why does this matter? If the input parameter of your function is &str you don't need to worry about move semantics "use of moved value", unlike Box<str>. 
+
+| Type | Ownership | Memory |
+| :---: | :---: | :---: |
+| Signed Integer (i8, i16, i32, i64, i128, isize | Owned | Signed intger in 1, 2, 4, 8, 16 bytes or of pointer size |
+| Unsigned Integer (u8, u16, u32, u64, u128, usize | Owned | Unigned intger in 1, 2, 4, 8, 16 bytes or of pointer size |
+| Floating Point (f32, f64) | Owned | Floating Point in 4 or 8 bytes | 
+| Char | Owned | 4 bytes of unicode scalar value |
+| Bool | Owned | 1 byte |
+| Unit | Owned | 0 bytes
+
+
+
+---
+Simple Examples
+
+Reusing a heap allocated value
+```Gleam
+fn move_semantics(input: String) {
+    do_a_thing(input)
+    do_something_else(input)
+}
+```
+
+```Rust
+fn move_semantics(input: Box<str>) {
+    do_a_thing(input);
+// move error
+    do_something_else(input);
+}
+```
 
 
 ---
