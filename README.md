@@ -107,7 +107,7 @@ fn get_longer(string_1: Rc<str>, string_2: Rc<str>) -> Rc<str> {
 }
 ```
 
-So the order of operations for heap allocated collection (String and Vec) is:
+If the above code was to have `String` types for inputs and outputs the data on the heap would be copied when returning to the caller stack frame. So the order of operations for heap allocated collection (String and Vec) is:
 
 `&[T]` -> ???
 
