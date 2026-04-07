@@ -72,6 +72,59 @@ For high-level rust primative data types on the stack are fine to copy into and 
 
 ---
 
+# Building Blocks
+High-level rust starts with pure (idempotent) functions. A pure function is deterministic and produces no side-effects. (Note pure functions have referential transparency (same input -> same output) not neccessarily internal implementation integrity (stack and heap usage and location)
+
+```Rust
+fn is_user(user_role: &Role) -> bool {
+    match user_role {
+        Role::Guest => false,
+        Role::Client => true,
+        Role::Admin => true,
+    }
+}
+```
+
+Generally you should prefer borrowed (reference) types for input parameters and owned types for outputs. Exceptions to this would be returning one of the input borrowed references, but often this requires lifetimes to work.
+
+```Rust
+fn get_longer<'str_lifetime>(string_1: &'str_lifetime str, string_2: &'str_lifetime str) -> &'str_lifetime str {
+    match string_1.len() > string_2.len() {
+        true => string_1,
+        false => string_2,
+    }
+}
+```
+
+If lifetimes become unwieldy the escape hatch is to use ReferenceCount (Rc). In fact, for long-lived immutable data Rc<str> is a more ergonomic owner than String
+
+```Rust
+fn get_longer(string_1: Rc<str>, string_2: Rc<str>) -> Rc<str> {
+    match string_1.len() > string_2.len() {
+        true => string_1,
+        false => string_2,
+    }
+}
+```
+
+So the order of operations for heap allocated collection (String and Vec) is:
+
+`&[T]` -> ???
+
+`Box<[T]>` -> When immutable and you don't need to clone it (cloning or mutating is expensive)
+
+`Rc<[T]>` -> When immutable and you don't need to clone it (cloning increments and decrements ref count)
+
+`Arc<[T]>` -> When immutable and you don't need to clone it and it needs to be thread safe (cloning increments and decrements ref count atomically)
+
+`Vec<T>` or `String` -> When you need a mutable or growable collection (cloning is expensive)
+
+
+
+
+
+---
+
 #Idiomatic Rust
 https://github.com/mre/idiomatic-rust?tab=readme-ov-file
 
