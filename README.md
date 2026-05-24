@@ -12,6 +12,9 @@ As a C-like language with great support for either functional or proceedural par
 ## Performance
 No garbage collection means low memory footprint. Speed should be just as or damn near any other language can achieve, if you are willing to put in the work. But we are grug brained developers. We recognize that Facebook was written in PHP, and we are okay with tradeoffs of performance to keep our ergonomics.
 
+# Table of Contents
+[Footguns](footguns/README.md)
+
 # What to prefer and what to avoid
 Be like Bruce Lee; absorb what is useful, disgard what is useless.
 
