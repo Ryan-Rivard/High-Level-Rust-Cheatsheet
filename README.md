@@ -4,12 +4,17 @@
 
 The domain model is the heart of high-level rust. With the use of tagged unions (Rust's super-powered enums) we can make invalid states unrepresentable, eliminating a category of possible bugs.
 
-All fields should be owned fields as reference fields require lifetime annotations
+All fields should be owned fields as reference fields require lifetime annotations (prefer `String` to `&str`)
 
-Fields that are expensive to copy should use some type of an RC (Reference Count) pointer
-| Field Type | Immutable RC | Mutable Single-Thread RC | Mutable Multi-Thread RC |
+For heap allocated values find the reference type that best matches that fields use-case:
+| Type | Mutability | Ownership | Mental Model |
 | :---: | :---: | :---: | :---: |
-| `String` / `Box<str>` | `RC<str>` | `RC<RefCell<str>` | `Arc<Mutex<str>` |
+| `String` | Fully Mutable | Single Owner | A standard private notebook. Only you own it, and you can write whatever you want in it. |
+| `Box<str>` | Immutable | Single Owner | A framed printed document on your wall. Only you own it, but it's finalized and you cannot edit it. |
+| `Rc<str>` | Immutable | Multiple Owners (via pointer cloning) | A public read-only web page. Many people have a link (Rc::clone) to read it simultaneously, but nobody can change the content. |
+| `Rc<RefCell<String>` | Fully Mutable (via interior mutability at runtime) | Multiple Owners | A shared Google Doc. Multiple people hold access links (Rc::clone), and any single person can hop in, turn on "Edit Mode" (.borrow_mut()), rewrite/expand the entire text, and everyone else instantly sees the updates. |
+
+Replace `Rc<>` with `Arc<>` and and `Rc<RefCell<>>` with `Arc<Mutex<>>` for multi-threaded apps 
 
 
 
