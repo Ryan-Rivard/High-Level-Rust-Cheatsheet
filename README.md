@@ -1,4 +1,21 @@
 # High-Level-Rust-Cheatsheet
+
+## Domain
+
+The domain model is the heart of high-level rust. With the use of tagged unions (Rust's super-powered enums) we can make invalid states unrepresentable, eliminating a category of possible bugs.
+
+All fields should be owned fields as reference fields require lifetime annotations
+
+Fields that are expensive to copy should use some type of an RC (Reference Count) pointer
+| Field Type | Immutable RC | Mutable Single-Thread RC | Mutable Multi-Thread RC |
+| :---: | :---: | :---: | :---: |
+| `String` / `Box<str>` | `RC<str>` | `RC<RefCell<str>` | `Arc<Mutex<str>` |
+
+
+
+## Functions
+## Architecture
+
 How to write Rust for Grug Brained Developers
 
 Writing rust on the intersection of the vendiagram of Correctness, Performance, and Ergonomics.
