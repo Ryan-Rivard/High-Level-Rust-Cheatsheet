@@ -20,13 +20,14 @@ This relationship exists for
 `Vec<T>` and `[T]`
 `HashMap<K, V>` and `[(K, V)]`
 
-If the type starts to get too long feel free to alias
-`type SharedTemps = Rc<RefCell<Vec<i32>>>`
-
-If construction of the type is used often feel free to use helper functions
-
-`let list: SharedVTemps = Rc::new(RefCell::new(Vec::new()));`
 ```Rust
+// If the type is long we can alias
+type SharedTemps = Rc<RefCell<Vec<i32>>>
+
+// But then the construction can be verbose
+let list: SharedVTemps = Rc::new(RefCell::new(Vec::new()));
+
+// Helper function for initalization
 trait SharedTempsExt {
     fn new_shared() -> Self;
 }
@@ -37,6 +38,7 @@ impl SharedTempsExt for SharedTemps {
     }
 }
 
+// Much simpler initialization
 let list = SharedTemps::new_shared();
 ```
 
