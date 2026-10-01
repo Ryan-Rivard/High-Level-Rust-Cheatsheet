@@ -24,6 +24,7 @@ If the type starts to get too long feel free to alias
 `type SharedTemps = Rc<RefCell<Vec<i32>>>`
 
 If construction of the type is used often feel free to use helper functions
+
 `let list: SharedVTemps = Rc::new(RefCell::new(Vec::new()));`
 ```Rust
 trait SharedTempsExt {
@@ -35,6 +36,8 @@ impl SharedTempsExt for SharedTemps {
         Rc::new(RefCell::new(Vec::new()))
     }
 }
+
+let list = SharedTemps::new_shared();
 ```
 
 
