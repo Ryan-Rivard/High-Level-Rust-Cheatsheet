@@ -14,7 +14,28 @@ For heap allocated values find the reference type that best matches that fields 
 | `Rc<str>` | Immutable | Multiple Owners (via pointer cloning) | A public read-only web page. Many people have a link (Rc::clone) to read it simultaneously, but nobody can change the content. |
 | `Rc<RefCell<String>` | Fully Mutable (via interior mutability at runtime) | Multiple Owners | A shared Google Doc. Multiple people hold access links (Rc::clone), and any single person can hop in, turn on "Edit Mode" (.borrow_mut()), rewrite/expand the entire text, and everyone else instantly sees the updates. |
 
-Replace `Rc<>` with `Arc<>` and and `Rc<RefCell<>>` with `Arc<Mutex<>>` for multi-threaded apps 
+Replace `Rc<>` with `Arc<>` and and `Rc<RefCell<>>` with `Arc<Mutex<>>` for multi-threaded apps
+
+This relationship exists for
+`Vec<T>` and `[T]`
+`HashMap<K, V>` and `[(K, V)]`
+
+If the type starts to get too long feel free to alias
+`type SharedTemps = Rc<RefCell<Vec<i32>>>`
+
+If construction of the type is used often feel free to use helper functions
+`let list: SharedVTemps = Rc::new(RefCell::new(Vec::new()));`
+```Rust
+trait SharedTempsExt {
+    fn new_shared() -> Self;
+}
+
+impl SharedTempsExt for SharedTemps {
+    fn new_shared() -> Self {
+        Rc::new(RefCell::new(Vec::new()))
+    }
+}
+```
 
 
 
